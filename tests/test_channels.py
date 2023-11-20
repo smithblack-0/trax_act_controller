@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from numpy import random
-from src.act import ACTController
+from src import ACTController
 
 
 class TestACTChannels(unittest.TestCase):

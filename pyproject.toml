@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "trax_act"  # Replace with your package name
+version = "0.1.0"  # Update as needed
+description = "An ACT (Adaptive Computation Time) controller with extensive error handling for trax."  # Provide a concise package description
+authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"  # Specify the Python version(s) your package is compatible with
+trax = "*"       # Replace '*' with a specific version if needed
+
+[tool.poetry.dev-dependencies]
+python = "^3.8"  # Specify the Python version(s) your package is compatible with
+trax = "*"       # Replace '*' with a specific version if needed
+numpy = "*"      # Replace '*' with a specific version if needed
+unittest = "*"   # Replace '*' with a specific version if needed
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
