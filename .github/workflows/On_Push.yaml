@@ -1,0 +1,7 @@
+name: On Push
+
+on: [push]
+
+jobs:
+  test:
+    uses: ./.github/workflows/test_workflow.yml

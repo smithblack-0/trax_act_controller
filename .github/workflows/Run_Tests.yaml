@@ -1,0 +1,33 @@
+name: Run Tests
+
+on:
+  workflow_call:
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install poetry
+      run: |
+        pip install poetry
+
+    - name: Install Dependencies using poetry
+      run: |
+        poetry install
+
+    - name: Run Tests
+      run: |
+        poetry run pytest
+
+    - name: Lint with flake8
+      run: |
+        poetry run flake8 .
