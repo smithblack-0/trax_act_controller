@@ -16,6 +16,10 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Update Utilities
+      run: |
+        pip install --upgrade pip setuptools wheel
+
     - name: Install poetry
       run: |
         pip install poetry
