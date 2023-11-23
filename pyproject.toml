@@ -7,6 +7,7 @@ authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 [tool.poetry.dependencies]
 python = ">=3.8, <4.0"  # Specify the Python version(s) your package is compatible with
 trax = "*"       # Replace '*' with a specific version if needed
+distutils = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = ">=5.2"
