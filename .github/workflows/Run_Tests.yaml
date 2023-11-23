@@ -16,9 +16,12 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Update Utilities
+    # It turns out ubuntu python environments do not consider distutils
+    # an important core feature. We need it. Install it
+    - name: Install distutils
       run: |
-        pip install --upgrade pip setuptools wheel
+        sudo apt-get update
+        sudo apt-get install -y python3-distutils
 
     - name: Install poetry
       run: |
@@ -32,6 +35,6 @@ jobs:
       run: |
         poetry run pytest
 
-    - name: Lint with flake8
+    - name: Lint with pylint
       run: |
         poetry run pylint
