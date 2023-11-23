@@ -11,7 +11,6 @@ trax = "*"       # Replace '*' with a specific version if needed
 [tool.poetry.dev-dependencies]
 pytest = ">=5.2"
 pylint = "*"
-distutils = "*"
 python = ">=3.8, <4.0"  # Specify the Python version(s) your package is compatible with
 trax = "*"       # Replace '*' with a specific version if needed
 numpy = "*"      # Replace '*' with a specific version if needed
