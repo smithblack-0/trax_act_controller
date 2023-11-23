@@ -7,6 +7,7 @@ The module containing the ACT controller
 import textwrap
 from typing import Optional, Dict, List, Tuple, Any, Union
 
+# Lint errors ignored, as these are found in the WSL environment.
 import trax # pylint: disable=import-error
 from trax import fastmath # pylint: disable=import-error
 from trax.fastmath import numpy as np # pylint: disable=import-error
