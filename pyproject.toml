@@ -14,7 +14,6 @@ flake8 = "^3.7"
 python = "^3.8"  # Specify the Python version(s) your package is compatible with
 trax = "*"       # Replace '*' with a specific version if needed
 numpy = "*"      # Replace '*' with a specific version if needed
-unittest = "*"   # Replace '*' with a specific version if needed
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
