@@ -4,4 +4,4 @@ on: [pull_request]
 
 jobs:
   test:
-    uses: ./.github/workflows/test_workflow.yml
+    uses: ./.github/workflows/Run_Tests.yaml
