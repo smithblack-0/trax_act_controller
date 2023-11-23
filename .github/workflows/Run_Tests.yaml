@@ -14,7 +14,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.11'
 
     # It turns out ubuntu python environments do not consider distutils
     # an important core feature. We need it. Install it
