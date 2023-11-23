@@ -4,109 +4,110 @@ The module containing the ACT controller
 
 """
 
-import trax
 import textwrap
-
 from typing import Optional, Dict, List, Tuple, Any, Union
-from trax import fastmath
-from trax.fastmath import numpy as np
+
+import trax # pylint: disable=import-error
+from trax import fastmath # pylint: disable=import-error
+from trax.fastmath import numpy as np # pylint: disable=import-error
 
 
 class ACTController:
-    """
-  Adaptive Computation Time (ACT) Controller for dynamic computation processes.
 
-  ACT (Adaptive Computation Time) is a technique used primarily in neural networks
-  to dynamically adjust the number of computation steps based on the complexity of the input data.
-  Key concepts of ACT include:
-  - Formation of a halting probability each iteration, which determines when to stop iterating.
+    """
+    Adaptive Computation Time (ACT) Controller for dynamic computation processes.
+
+    ACT (Adaptive Computation Time) is a technique used primarily in neural networks
+    to dynamically adjust the number of computation steps based on the complexity of the input data.
+    Key concepts of ACT include:
+    - Formation of a halting probability each iteration, which determines when to stop iterating.
     Iteration halts when the cumulative halting probability is about to exceed one.
-  - The output is a weighted sum (or superposition) of the states at each iteration, weighted by
+    - The output is a weighted sum (or superposition) of the states at each iteration, weighted by
     their respective halting probabilities. This superposition allows for a fine-grained balance
     between computation at each step.
-  - The superposition nature of the output makes it compatible with gradient descent, allowing
+    - The superposition nature of the output makes it compatible with gradient descent, allowing
     backpropagation to effectively adjust model parameters.
 
-  This class provides a flexible implementation of ACT by managing multiple data streams or 'channels'
-  and allowing for dynamic halting based on cumulative halting probabilities.
+    This class provides a flexible implementation of ACT by managing multiple data streams or
+    'channels' and allowing for dynamic halting based on cumulative halting probabilities.
 
-  Channels:
+    Channels:
 
-  Manages multiple 'channels' of data, each representing a separate stream
-  of data accumulation. Channels can handle different aspects of the computation
-  process, such as states, outputs, or intermediate calculations, and accumulate
-  data independently across iterations.
+    Manages multiple 'channels' of data, each representing a separate stream
+    of data accumulation. Channels can handle different aspects of the computation
+    process, such as states, outputs, or intermediate calculations, and accumulate
+    data independently across iterations.
 
-  Key Features:
-  - Handles multiple channels for parallel data management.
-  - Manages nested data structures including dictionaries, lists, and tuples.
-  - Tracks halting statistics to monitor the number of iterations required for halting.
-  - Supports batch dimensions for parallel processing of multiple data sets.
-  - Provides comprehensive error handling with detailed messages for troubleshooting.
-  - Lazily infers batch shape from the first tensor data, eliminating the need for users
+    Key Features:
+    - Handles multiple channels for parallel data management.
+    - Manages nested data structures including dictionaries, lists, and tuples.
+    - Tracks halting statistics to monitor the number of iterations required for halting.
+    - Supports batch dimensions for parallel processing of multiple data sets.
+    - Provides comprehensive error handling with detailed messages for troubleshooting.
+    - Lazily infers batch shape from the first tensor data, eliminating the need for users
     to specify the exact shape upfront, only the number of batch dimensions.
 
-  Configuration Options:
-  - `num_batch_dims` (int): Specify the number of batch dimensions in tensors.
-  - `channels` (Union[List[str], Dict[str, Optional[Any]]]):
+    Configuration Options:
+    - `num_batch_dims` (int): Specify the number of batch dimensions in tensors.
+    - `channels` (Union[List[str], Dict[str, Optional[Any]]]):
       * List of channel names: Initializes empty channels to be filled during the process.
-      * Dictionary with channel names and initial values: Pre-configures channels with given tensors.
-  - `cum_halting_probability` (Optional[np.ndarray]): Initial tensor for cumulative halting probabilities.
-      * Generally, you would use this to pick up on a halted act process, or ensure your halting probabilities
-        are already partially exhausted.
-  - `epsilon` (float): Small constant used for halting threshold.
+      * Dictionary with channel names and initial values: Pre-configures channels with
+        given tensors.
+    - `cum_halting_probability` (Optional[np.ndarray]): Initial tensor for cumulative halting
+       probabilities.
+      * Generally, you would use this to pick up on a halted act process,
+      or ensure your halting probabilities are already partially exhausted.
+    - `epsilon` (float): Small constant used for halting threshold.
 
-  Usage:
-  1. Initialize the class with batch dimensions and channel names.
-  2. Buffer tensors into channels using `buffer_tensors`.
-  3. Call `update_channels` with halting probabilities to process and accumulate data.
-  4. Access accumulated data using `get_channel` or channel indexing.
+    Usage:
+    1. Initialize the class with batch dimensions and channel names.
+    2. Buffer tensors into channels using `buffer_tensors`.
+    3. Call `update_channels` with halting probabilities to process and accumulate data.
+    4. Access accumulated data using `get_channel` or channel indexing.
 
-  Code Example 1 - Basic Usage:*
-  ```python
-  act_controller = ACTController(num_batch_dims=1, channels=["state", "output"])
-  while not act_controller.is_halted:
+    Code Example 1 - Basic Usage:*
+    ```python
+    act_controller = ACTController(num_batch_dims=1, channels=["state", "output"])
+    while not act_controller.is_halted:
       state_tensor = np.array([[1.0, 2.0], [3.0, 4.0]])
       output_tensor = np.array([[0.5, 0.5], [0.6, 0.4]])
       act_controller.buffer_tensors("state", state_tensor)
       act_controller.buffer_tensors("output", output_tensor)
       halting_probabilities = np.array([0.5, 0.5])
       act_controller.update_channels(halting_probabilities)
-  accumulated_state = act_controller.get_channel("state")
-  accumulated_output = act_controller.get_channel("output")
-  ```
+    accumulated_state = act_controller.get_channel("state")
+    accumulated_output = act_controller.get_channel("output")
+    ```
 
-  Code Example 2 - Accumulating Nested Data:
-  ```python
-  act_controller = ACTController(num_batch_dims=1, channels=["composite_data"])
-  nested_data = {"vector": np.array([1.0, 2.0]), "matrix": np.array([[1, 2], [3, 4]])}
-  while not act_controller.is_halted:
+    Code Example 2 - Accumulating Nested Data:
+    ```python
+    act_controller = ACTController(num_batch_dims=1, channels=["composite_data"])
+    nested_data = {"vector": np.array([1.0, 2.0]), "matrix": np.array([[1, 2], [3, 4]])}
+    while not act_controller.is_halted:
       act_controller.buffer_tensors("composite_data", nested_data)
       halting_probabilities = np.array([0.7])
       act_controller.update_channels(halting_probabilities)
-  accumulated_data = act_controller.get_channel("composite_data")
-  ```
+    accumulated_data = act_controller.get_channel("composite_data")
+    ```
 
-  Properties:
-  - `num_batch_dims` (int): Number of batch dimensions in tensors.
-  - `batch_shape` (Tuple[int, ...]): Shape of the batch dimensions.
-  - `batches_halted` (np.ndarray): Indicates if each batch element has halted.
-  - `channel_names` (Tuple[str, ...]): Names of the managed channels.
-  - `channels` (Dict[str, Optional[Any]]): Data accumulators for each channel.
-  - `residuals` (Optional[np.ndarray]): Residuals for halting.
-  - `num_halting_steps` (Optional[np.ndarray]): Statistics of halting iterations.
+    Properties:
+    - `num_batch_dims` (int): Number of batch dimensions in tensors.
+    - `batch_shape` (Tuple[int, ...]): Shape of the batch dimensions.
+    - `batches_halted` (np.ndarray): Indicates if each batch element has halted.
+    - `channel_names` (Tuple[str, ...]): Names of the managed channels.
+    - `channels` (Dict[str, Optional[Any]]): Data accumulators for each channel.
+    - `residuals` (Optional[np.ndarray]): Residuals for halting.
+    - `num_halting_steps` (Optional[np.ndarray]): Statistics of halting iterations.
 
-  Public Methods:
-  - `buffer_tensors`: Buffers tensors into a specified channel.
-  - `update_channels`: Updates channels with buffered tensors based on halting probabilities.
-  - `get_channel`: Retrieves data for a specified channel.
-  - `__getitem__`: Allows channel data access using indexing.
-  """
-
+    Public Methods:
+    - `buffer_tensors`: Buffers tensors into a specified channel.
+    - `update_channels`: Updates channels with buffered tensors based on halting probabilities.
+    - `get_channel`: Retrieves data for a specified channel.
+    - `__getitem__`: Allows channel data access using indexing.
+    """
     def _validate_structures_same(self,
                                   structures: Tuple[Any, Any],
                                   names: Tuple[str, str],
-                                  error_activitity: str
                                   ):
         # There are several places where we could have nested structures
         # that must be the same between act iterations. This internal
@@ -124,7 +125,6 @@ class ACTController:
                 """
                 msg = textwrap.dedent(msg)
                 raise ValueError(msg)
-            return None
 
         fastmath.nested_map_multiarg(check_shapes_same, *structures, ignore_nones=True)
 
@@ -214,7 +214,7 @@ class ACTController:
             structures = (self.get_channel(name, True), value)
             names = ("inferred channel", "provided buffer")
             try:
-                self._validate_structures_same(structures, names, f"buffering tensor named '{name}'")
+                self._validate_structures_same(structures, names)
             except ValueError as err:
                 msg = f"""
                 Attempting to buffer to channel '{name}', but buffer and channel
@@ -229,8 +229,8 @@ class ACTController:
             # This channel was never setup. Set it up by
             # walking the tree and making zeros like, then
             # storing the update.
-            self._manage_batch_shape(value, f"buffering tensor named %s" % name)
-            empty_accumulator = fastmath.nested_map(lambda x: np.zeros_like(x),
+            self._manage_batch_shape(value, f"buffering tensor named {name}")
+            empty_accumulator = fastmath.nested_map(np.zeros_like,
                                                     value,
                                                     ignore_nones=True)
             self._set_channel(name, empty_accumulator)
@@ -252,8 +252,8 @@ class ACTController:
         # This is deterministic
         output = []
 
-        def gather_shapes(x):
-            output.append(x.shape)
+        def gather_shapes(tensor):
+            output.append(tensor.shape)
 
         trax.fastmath.nested_map(gather_shapes, structure, ignore_nones=True)
         return output
@@ -313,45 +313,52 @@ class ACTController:
 
     @property
     def is_halted(self) -> bool:
-        if self.cum_halting_prob is None:
+        """Whether the act process has halted"""
+        if self._get_probs() is None:
             return False
         return np.all(self.batches_halted)
 
     @property
-    def batch_shape(self) -> Tuple[int, ...]:
+    def batch_shape(self) -> Optional[Tuple[int, ...]]:
+        """ The batch state, or None if not defined"""
         return self._batch_info["shape"]
 
     @property
-    def batches_halted(self) -> np.ndarray:
+    def batches_halted(self) -> Optional[np.ndarray]:
+        """ A bool tensor, batches that have halted"""
+        if self._get_probs() is None:
+            return None
         return self._get_probs() > 1 - self.epsilon
 
     @property
     def channel_names(self) -> Tuple[str, ...]:
+        """The names of the supported channels"""
         return tuple(self._channels.keys())
 
     @property
     def channels(self) -> Dict[str, Optional[Any]]:
+        """ A view into the channels."""
         return {name: self.get_channel(name, True) for name in self.channel_names}
 
     @property
     def buffers(self) -> Dict[str, Optional[Any]]:
+        """ The buffers """
         return {name: self._get_buffer(name) for name in self.channel_names}
 
     @property
     def residuals(self) -> Optional[np.ndarray]:
+        """ The residuals"""
         return self.get_residuals()
 
     @property
     def num_halting_steps(self) -> Optional[np.ndarray]:
+        """Statistics on the number of halting steps"""
         return self._get_num_halting_steps()
 
     @property
     def cumulative_halting_probabilities(self) -> Optional[np.ndarray]:
+        """Cumulative halting probabilities"""
         return self._get_probs()
-
-    @property
-    def cum_halting_prob(self) -> Optional[np.ndarray]:
-        return self._halting_prob
 
     # Internally, buffers and channels are interacted with
     # only using manually defined getters and setters.
@@ -399,7 +406,7 @@ class ACTController:
     def _set_channel(self,
                      name: str,
                      value: Any) -> None:
-        self._manage_batch_shape(value, "setting channel %s" % name)
+        self._manage_batch_shape(value, f"setting channel {name}")
         self._channels[name] = value
 
     def _set_num_halting_steps(self, value: np.ndarray) -> None:
@@ -417,7 +424,7 @@ class ACTController:
         not forcing and not halting
         """
         if not self.is_halted and not force:
-            msg = f"""
+            msg = """
             Issue when retrieving residuals.
       
             Attempted to retrieve residuals when act process
@@ -464,13 +471,15 @@ class ACTController:
         are bool tensors that tell us information on act halt status
         :param halting_probabilities:
         :return:
-          is_halted: np.ndarray, tells us if before the halting update the current iteration is halted
+          is_halted: np.ndarray, tells us if before the halting update the current iteration
+                     is halted
           will_be_halted: np.ndarray, tells us after the halting update what is halted
           will_be_newly_halted: np.ndarray, tells us what is halting this particular update.
         """
         is_halted = self.batches_halted
-        will_be_halted = self.cum_halting_prob + halting_probabilities > 1 - self.epsilon
-        will_be_newly_halted = will_be_halted & ~is_halted
+        will_be_halted = self.cumulative_halting_probabilities + halting_probabilities \
+                            > 1 - self.epsilon
+        will_be_newly_halted = will_be_halted & ~ is_halted  # pylint: disable=E1130
         return is_halted, will_be_halted, will_be_newly_halted
 
     def _manage_residuals(self,
