@@ -23,6 +23,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3-distutils
 
+    - name: Verify Issue
+      run: |
+        pip wheel --no-cache-dir --use-pep517 "numpy (==1.24.4)"
+
     - name: Install poetry
       run: |
         pip install poetry
