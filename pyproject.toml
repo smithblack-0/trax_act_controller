@@ -6,12 +6,12 @@ authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-tensorflow = ">=2.4"
+tensorflow = ">=2.12"
 trax = "*"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.9"
-tensorflow = ">=2.4"
+tensorflow = ">=2.12"
 trax = "*"
 numpy = "*"
 pytest = ">=5.2"
