@@ -5,13 +5,13 @@ description = "An ACT (Adaptive Computation Time) controller with extensive erro
 authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
-tensorflow = ">=2.12"
+python = ">=3.9, <3.12" # Must be between 3.9 and 3.12
+tensorflow = ">=2.14"
 trax = "*"
 
 [tool.poetry.dev-dependencies]
 python = ">=3.9"
-tensorflow = ">=2.12"
+tensorflow = ">=2.14"
 trax = "*"
 numpy = "*"
 pytest = ">=5.2"
