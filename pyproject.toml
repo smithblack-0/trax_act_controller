@@ -1,13 +1,8 @@
 [tool.poetry]
-name = "trax-act"  # Replace with your package name
+name = "trax_act"  # Replace with your package name
 version = "0.1.0"  # Update as needed
 description = "An ACT (Adaptive Computation Time) controller with extensive error handling for trax."  # Provide a concise package description
 authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
-
-[[tool.poetry.source]]
-name = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
-url = 'https://pypi.org/simple'
-priority = 'default'
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.12"
