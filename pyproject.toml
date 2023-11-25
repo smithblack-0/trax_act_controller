@@ -4,16 +4,22 @@ version = "0.1.0"  # Update as needed
 description = "An ACT (Adaptive Computation Time) controller with extensive error handling for trax."  # Provide a concise package description
 authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 
+[[tool.poetry.source]]
+name = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+url = 'https://pypi.org/simple'
+secondary = false
+
 [tool.poetry.dependencies]
 python = ">=3.8, <3.12"
 trax = "*"
 
 [tool.poetry.dev-dependencies]
-# pytest = ">=5.2"
-# pylint = "*"
+
 python = ">=3.8, <3.12"
 trax = "*"
 numpy = "*"
+pytest = ">=5.2"
+pylint = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
