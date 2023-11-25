@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from numpy import random
-from src.trax_act_controller import ACTController
+from trax_act import ACTController
 
 class TestACTBuffer(unittest.TestCase):
   def test_lazy_set(self):
