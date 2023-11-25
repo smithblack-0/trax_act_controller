@@ -5,15 +5,15 @@ description = "An ACT (Adaptive Computation Time) controller with extensive erro
 authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.8, <3.12"  # Specify the Python version(s) your package is compatible with
-trax = "*"       # Replace '*' with a specific version if needed
+python = ">=3.8, <3.12"
+trax = "*"
 
 [tool.poetry.dev-dependencies]
-pytest = ">=5.2"
-pylint = "*"
-python = ">=3.8, <3.12"  # Specify the Python version(s) your package is compatible with
-trax = "*"       # Replace '*' with a specific version if needed
-numpy = "*"      # Replace '*' with a specific version if needed
+# pytest = ">=5.2"
+# pylint = "*"
+python = ">=3.8, <3.12"
+trax = "*"
+numpy = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
