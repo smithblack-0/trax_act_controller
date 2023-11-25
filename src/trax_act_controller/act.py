@@ -166,7 +166,9 @@ class ACTController:
             msg = f"""
             Attempting to buffer to channel '{name}', but this channel was never setup.
       
-            Possible Resolution: Either check your spelling, or provide another channel called {name} in the constructor"""
+            Possible Resolution: Either check your spelling, or 
+            provide another channel called {name} in the constructor
+            """
             msg = textwrap.dedent(msg)
             raise KeyError(msg)
 
