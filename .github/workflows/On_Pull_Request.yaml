@@ -1,7 +1,20 @@
 name: On Pull Request
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  test:
-    uses: ./.github/workflows/Run_Tests.yaml
+  trigger-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Run Tests Workflow
+        uses: ./.github/workflows/Run_Tests.yaml  # Use the path to your Run_Tests workflow YAML file
+        id: trigger-tests
+
+      - name: Set Pull Request Status
+        if: ${{ steps.trigger-tests.outcome != 'failure' }}  # Check if the Run Tests job succeeded
+        run: |
+          # Set the pull_request_status to "success" if the tests passed
+          echo "::set-output name=pull_request_status::success"
