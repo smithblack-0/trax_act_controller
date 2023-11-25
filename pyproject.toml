@@ -7,7 +7,7 @@ authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 [[tool.poetry.source]]
 name = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
 url = 'https://pypi.org/simple'
-secondary = false
+priority = 'default'
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.12"
