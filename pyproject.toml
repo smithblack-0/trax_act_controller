@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "trax_act"  # Replace with your package name
-version = "0.1.0"  # Update as needed
+name = "trax_act_controller" # This and the src package must have the same name
+version = "0.1.1"
 description = "An ACT (Adaptive Computation Time) controller with extensive error handling for trax."  # Provide a concise package description
 authors = ["Chris O'Quinn <chrisoquinn.2@gmail.com>"]
 
