@@ -39,4 +39,4 @@ jobs:
 
     - name: Lint with pylint
       run: |
-        poetry run pylint
+        poetry run pylint src
