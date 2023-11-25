@@ -40,3 +40,4 @@ jobs:
     - name: Lint with pylint
       run: |
         poetry run pylint src
+        poetry run pylint tests
