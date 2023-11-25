@@ -1,3 +1,8 @@
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=unnecessary-lambda-assignment
+# pylint: disable=import-error
+
 import unittest
 import numpy as np
 from numpy import random
@@ -5,50 +10,51 @@ from trax_act_controller import ACTController
 
 
 class TestACTMain(unittest.TestCase):
-  def test_paper_act(self):
-    ### An example of a traditional ACT process.
+    def test_paper_act(self):
+        """ Test act as implemented in the paper."""
+        ### An example of a traditional ACT process.
 
-    embed = 5
-    batch = 4
+        embed = 5
+        batch = 4
 
-    shape = [batch, embed]
+        shape = [batch, embed]
 
-    # Define mock features
-    make_state =  lambda : random.standard_normal(shape)
-    make_output = lambda : random.standard_normal(shape)
-    make_probs = lambda : 0.5* np.ones([batch])
+        # Define mock features
+        make_state =  lambda : random.standard_normal(shape)
+        make_output = lambda : random.standard_normal(shape)
+        make_probs = lambda : 0.5* np.ones([batch])
 
-    #Run act loop
-    act_manager = ACTController(1, ["state", "output"])
-    while not act_manager.is_halted:
+        #Run act loop
+        act_manager = ACTController(1, ["state", "output"])
+        while not act_manager.is_halted:
 
-      state = make_state()
-      output = make_output()
-      probs = make_probs()
+            state = make_state()
+            output = make_output()
+            probs = make_probs()
 
-      act_manager.buffer_tensors("state", state)
-      act_manager.buffer_tensors("output", output)
-      act_manager.update_channels(probs)
+            act_manager.buffer_tensors("state", state)
+            act_manager.buffer_tensors("output", output)
+            act_manager.update_channels(probs)
 
-    # Check shapes
-    self.assertTrue(act_manager["state"].shape == (batch, embed))
-    self.assertTrue(act_manager["output"].shape == (batch, embed))
-    self.assertTrue(act_manager.residuals.shape == (batch,))
+        # Check shapes
+        self.assertTrue(act_manager["state"].shape == (batch, embed))
+        self.assertTrue(act_manager["output"].shape == (batch, embed))
+        self.assertTrue(act_manager.residuals.shape == (batch,))
 
-  def test_nested_data(self):
-      """ An example of an act structure handling nested data and more complex state"""
+    def test_nested_data(self):
+        """ An example of an act structure handling nested data and more complex state"""
 
-      # Nested datastructures can be incorporated into the
-      # act process. When this happens,
-      embed = 5
-      batch = 4
+        # Nested datastructures can be incorporated into the
+        # act process. When this happens,
+        embed = 5
+        batch = 4
 
-      shape = [batch, embed]
+        shape = [batch, embed]
 
-      # Define mock features
+        # Define mock features
 
-      make_control_state =  lambda : random.standard_normal(shape)
-      make_memory_state = lambda : {"LSTM" : ( random.standard_normal(shape),
+        make_control_state =  lambda : random.standard_normal(shape)
+        make_memory_state = lambda : {"LSTM" : ( random.standard_normal(shape),
                                                random.standard_normal(shape)
                                               ),
                                     "RecurrentAttn" : [
@@ -56,53 +62,53 @@ class TestACTMain(unittest.TestCase):
                                         random.standard_normal(shape)
                                       ]
                                     }
-      make_output = lambda : random.standard_normal(shape)
-      make_probs = lambda : 0.5* np.ones([batch])
+        make_output = lambda : random.standard_normal(shape)
+        make_probs = lambda : 0.5* np.ones([batch])
 
-      # Run ACT loop
-      act_controller = ACTController(1, ["control_state", "memory", "output"])
-      while not act_controller.is_halted:
+        # Run ACT loop
+        act_controller = ACTController(1, ["control_state", "memory", "output"])
+        while not act_controller.is_halted:
 
-        control_state = make_control_state()
-        memory = make_memory_state()
-        output = make_output()
-        probs = make_probs()
+            control_state = make_control_state()
+            memory = make_memory_state()
+            output = make_output()
+            probs = make_probs()
 
-        act_controller.buffer_tensors("control_state", control_state)
-        act_controller.buffer_tensors("memory", memory)
-        act_controller.buffer_tensors("output", output)
-        act_controller.update_channels(probs)
+            act_controller.buffer_tensors("control_state", control_state)
+            act_controller.buffer_tensors("memory", memory)
+            act_controller.buffer_tensors("output", output)
+            act_controller.update_channels(probs)
 
-  def test_multidimensonal_batch(self):
-    """ A batch can be multidimensional, such as in an ensemble. Test it"""
+    def test_multidimensonal_batch(self):
+        """ A batch can be multidimensional, such as in an ensemble. Test it"""
 
-        ### An example of a traditional ACT process.
+            ### An example of a traditional ACT process.
 
-    embed = 5
-    batch = 4
-    ensemble= 6
-    batch_dims = 2
+        embed = 5
+        batch = 4
+        ensemble= 6
+        batch_dims = 2
 
-    shape = [batch, ensemble, embed]
+        shape = [batch, ensemble, embed]
 
-    # Define mock features
-    make_state =  lambda : random.standard_normal(shape)
-    make_output = lambda : random.standard_normal(shape)
-    make_probs = lambda : 0.5* np.ones([batch, ensemble])
+        # Define mock features
+        make_state =  lambda : random.standard_normal(shape)
+        make_output = lambda : random.standard_normal(shape)
+        make_probs = lambda : 0.5* np.ones([batch, ensemble])
 
-    #Run act loop
-    act_manager = ACTController(batch_dims, ["state", "output"])
-    while not act_manager.is_halted:
+        #Run act loop
+        act_manager = ACTController(batch_dims, ["state", "output"])
+        while not act_manager.is_halted:
 
-      state = make_state()
-      output = make_output()
-      probs = make_probs()
+            state = make_state()
+            output = make_output()
+            probs = make_probs()
 
-      act_manager.buffer_tensors("state", state)
-      act_manager.buffer_tensors("output", output)
-      act_manager.update_channels(probs)
+            act_manager.buffer_tensors("state", state)
+            act_manager.buffer_tensors("output", output)
+            act_manager.update_channels(probs)
 
-    # Check shapes
-    self.assertTrue(act_manager["state"].shape == (batch, ensemble, embed))
-    self.assertTrue(act_manager["output"].shape == (batch, ensemble, embed))
-    self.assertTrue(act_manager.residuals.shape == (batch, ensemble))
+        # Check shapes
+        self.assertTrue(act_manager["state"].shape == (batch, ensemble, embed))
+        self.assertTrue(act_manager["output"].shape == (batch, ensemble, embed))
+        self.assertTrue(act_manager.residuals.shape == (batch, ensemble))
