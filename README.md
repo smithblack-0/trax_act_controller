@@ -17,7 +17,7 @@ The ACTController class in this package provides an implementation of the Adapti
 To install the package, use the following command:
 
 ```bash
-pip install trax_act
+pip install trax_act_controller
 ```
 
 # Usage
@@ -37,7 +37,7 @@ Basic usage example. This is a reproduction of traditional Adaptive Computation 
 as would be found in the paper. 
 
 ```python
-from trax-act import ACTController
+from trax_act_controller import ACTController
 import numpy as np
 
 act_controller = ACTController(num_batch_dims=1, channels=["state", "output"])
@@ -57,7 +57,7 @@ Advanced case, with mock data in "vector" and "matrix". You could, however, in t
 state across an entire model
 
 ```python
-from trax-act import ACTController
+from trax_act_controller import ACTController
 import numpy as np
 
 act_controller = ACTController(num_batch_dims=1, channels=["composite_data"])
