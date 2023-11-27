@@ -97,4 +97,6 @@ We welcome new ideas and suggestions. To request a feature:
 * If not, create a new issue, clearly describing the feature and its potential benefits.
 * Provide any thoughts on how the feature might be implemented.
 
-# LicenseThis project is licensed under the MIT License.
+# License
+
+This project is licensed under the MIT License.
