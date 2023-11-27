@@ -29,4 +29,4 @@ jobs:
 
     - name: Publish to PyPI
       run: |
-        poetry publish --build -u _token__ -p ${{ secrets.__SETUP_TOKEN__ }} --no-interaction --verbose
+        poetry publish -u _token__ -p ${{ secrets.__SETUP_TOKEN__ }} --verbose
