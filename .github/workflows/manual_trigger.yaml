@@ -5,4 +5,4 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/run_tests.yaml
+    uses: ./.github/workflows/publish.yaml
