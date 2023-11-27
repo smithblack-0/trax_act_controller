@@ -29,4 +29,5 @@ jobs:
 
     - name: Publish to PyPI
       run: |
-        poetry publish -u _token__ -p ${{ secrets.__SETUP_TOKEN__ }} --verbose
+        echo ${{ secrets.PYPI_TOKEN }}
+        poetry publish -u _token__ -p ${{ secrets.PYPI_TOKEN }} --verbose
