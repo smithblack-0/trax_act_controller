@@ -17,7 +17,7 @@ The ACTController class in this package provides an implementation of the Adapti
 To install the package, use the following command:
 
 ```bash
-pip install trax-act
+pip install trax_act
 ```
 
 # Usage
